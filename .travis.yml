@@ -1,0 +1,44 @@
+sudo: required
+language: python
+services:
+- docker
+env:
+- distro=alpine
+- distro=ubuntu
+stages:
+- test
+- name: deploy
+  if: branch = develop
+
+before_install:
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
+  $(lsb_release -cs) stable"
+- sudo apt-get update
+- sudo apt-get -y install --only-upgrade openssl curl
+- sudo apt-get -y install docker-ce
+- docker version
+script:
+- docker image build --no-cache --pull --tag digitalr00ts:${distro} ${distro}/
+- docker container run --rm --workdir /root --name test-${distro} -d -p 1024:1024 digitalr00ts:${distro} nc -l 1024 -v
+- docker container ls
+- nc -vzw1 localhost 1024
+after_failure:
+- docker container logs --details test-${distro}
+after_success:
+- docker image history digitalr00ts:${distro}
+
+jobs:
+  include:
+    - stage: deploy
+      env:
+      - distro=all
+      before_install: ''
+      install: ''
+      script:
+      - .travis/deploy.sh
+      after_failure: ''
+
+branches:
+  except:
+  - master
