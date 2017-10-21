@@ -18,8 +18,8 @@ RUN cd && set -ex && \
   apt-get install -y --no-install-recommends apt-transport-https ca-certificates && \
   apt-get install -y --no-install-recommends wget && \
   apt-get dist-upgrade -y --no-install-recommends -o Dpkg::Options::="--force-confold" && \
-  wget --https-only --no-cache --no-verbose https://github.com/krallin/tini/releases/download/v0.16.1/tini_0.16.1-amd64.deb && \
-  wget --https-only --no-cache --no-verbose https://github.com/krallin/tini/releases/download/v0.16.1/tini_0.16.1-amd64.deb.asc && \
+  wget --https-only --no-cache --no-hsts --no-verbose https://github.com/krallin/tini/releases/download/v0.16.1/tini_0.16.1-amd64.deb && \
+  wget --https-only --no-cache --no-hsts --no-verbose https://github.com/krallin/tini/releases/download/v0.16.1/tini_0.16.1-amd64.deb.asc && \
   gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 && \
   gpg --verify tini_0.16.1-amd64.deb.asc && \
   dpkg -i tini_0.16.1-amd64.deb && \
@@ -27,8 +27,7 @@ RUN cd && set -ex && \
   apt-get purge -y wget apt-transport-https ca-certificates && \
   apt-get autoremove -y && \
   apt-get clean && \
-  rm -rf -- /var/cache/apt/* \
-    /tmp/* /var/tmp/* /var/lib/apt/lists/* && \
-    /etc/ssh/ssh_host_* /root/.wget-hsts /root/.cache
+  rm -rf -- /tmp/* /var/tmp/* \
+     /var/cache/apt/* /var/lib/apt/lists/*
 
 ENTRYPOINT ["/usr/bin/tini", "-g", "--"]
