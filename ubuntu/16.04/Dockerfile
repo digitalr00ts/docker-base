@@ -26,10 +26,8 @@ RUN cd && set -ex && \
   apt-get purge -y wget apt-transport-https ca-certificates && \
   apt-get autoremove -y && \
   apt-get clean && \
-  rm -rf -- /var/cache/apt/* && \
-  rm -rf -- /tmp/* /var/tmp/* /var/lib/apt/lists/* && \
-  rm -f -- /etc/ssh/ssh_host_* && \
-  rm -f -- /root/.wget-hsts && \
-  rm -rf -- /root/.cache
+  rm -rf -- /var/cache/apt/* \
+    /tmp/* /var/tmp/* /var/lib/apt/lists/* && \
+    /etc/ssh/ssh_host_* /root/.wget-hsts /root/.cache
 
 ENTRYPOINT ["/usr/bin/tini", "-g", "--"]
