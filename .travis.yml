@@ -9,34 +9,34 @@ stages:
 - test
 - name: deploy
   if: branch = develop
-
 before_install:
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo sh -c 'echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list'
+- sudo sh -c 'echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release
+  -cs) stable" > /etc/apt/sources.list.d/docker.list'
 - sudo apt-get update -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/docker.list
 - sudo apt-get -y install docker-ce
 - docker version
+install: true
 script:
 - docker image build --no-cache --pull --tag digitalr00ts:${distro} ${distro}/
-- docker container run --rm --workdir /root --name test-${distro} -d -p 1024:1024 digitalr00ts:${distro} nc -l 1024 -v
+- docker container run --rm --workdir /root --name test-${distro} -d -p 1024:1024
+  digitalr00ts:${distro} nc -l 1024 -v
 - docker container ls
 - nc -vzw1 localhost 1024
 after_failure:
 - docker container logs --details test-${distro}
 after_success:
 - docker image history digitalr00ts:${distro}
-
 jobs:
   include:
-    - stage: deploy
-      env:
-      - distro=all
-      before_install: ''
-      install: ''
-      script:
-      - .travis/deploy.sh
-      after_failure: ''
-
+  - stage: deploy
+    env:
+    - distro=all
+    before_install: true
+    install: true
+    script:
+    - ".travis/deploy.sh"
+    after_failure: true
 branches:
   except:
   - master
