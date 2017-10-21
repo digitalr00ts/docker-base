@@ -18,14 +18,14 @@ before_install:
 - docker version
 install: true
 script:
-- docker image build --no-cache --pull --tag digitalr00ts:${distro} ${distro}/
-- docker container run --rm --workdir /root --name test-${distro} -p 1024:1024
-  digitalr00ts:${distro} whoami
+- docker image build --no-cache --pull --tag test-${distro} ${distro}/
+- docker container run --rm --workdir /root --name ${distro}
+  test-${distro} env
 - docker image ls
 after_failure:
-- docker container logs --details test-${distro}
+- docker container logs --details ${distro}
 after_success:
-- docker image history digitalr00ts:${distro}
+- docker image history test-${distro}
 jobs:
   include:
   - stage: deploy
@@ -36,6 +36,7 @@ jobs:
     script:
     - ".travis/deploy.sh"
     after_failure: true
+    after_success: true
 branches:
   except:
   - master
