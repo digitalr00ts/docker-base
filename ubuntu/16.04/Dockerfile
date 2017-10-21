@@ -16,6 +16,7 @@ RUN cd && set -ex && \
     ln -sf /bin/true /usr/bin/ischroot && \
   apt-get update && \
   apt-get install -y --no-install-recommends apt-transport-https ca-certificates && \
+  apt-get install -y --no-install-recommends wget && \
   apt-get dist-upgrade -y --no-install-recommends -o Dpkg::Options::="--force-confold" && \
   wget --https-only --no-cache --no-verbose https://github.com/krallin/tini/releases/download/v0.16.1/tini_0.16.1-amd64.deb && \
   wget --https-only --no-cache --no-verbose https://github.com/krallin/tini/releases/download/v0.16.1/tini_0.16.1-amd64.deb.asc && \
