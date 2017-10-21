@@ -19,10 +19,9 @@ before_install:
 install: true
 script:
 - docker image build --no-cache --pull --tag digitalr00ts:${distro} ${distro}/
-- docker container run --rm --workdir /root --name test-${distro} -d -p 1024:1024
-  digitalr00ts:${distro} nc -l 1024 -v
-- docker container ls
-- nc -vzw1 localhost 1024
+- docker container run --rm --workdir /root --name test-${distro} -p 1024:1024
+  digitalr00ts:${distro} whoami
+- docker image ls
 after_failure:
 - docker container logs --details test-${distro}
 after_success:
