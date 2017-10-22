@@ -14,9 +14,9 @@ before_install:
 - sudo sh -c 'echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release
   -cs) stable" > /etc/apt/sources.list.d/docker.list'
 - sudo apt-get update -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/docker.list
+install:
 - sudo apt-get -y install docker-ce
 - docker version
-install: true
 script:
 - docker image build --no-cache --pull --tag test-${distro} ${distro}/
 - docker container run --rm --workdir /root --name ${distro} test-${distro} env
@@ -29,13 +29,13 @@ jobs:
   include:
   - stage: deploy
     env:
-    - distro=all
-    before_install: true
+    - distro=
+    before_install: ''
     install: true
     script:
     - ".travis/deploy.sh"
-    after_failure: true
-    after_success: true
+    after_failure: ''
+    after_success: ''
 branches:
   except:
   - master
