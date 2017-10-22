@@ -19,8 +19,7 @@ before_install:
 install: true
 script:
 - docker image build --no-cache --pull --tag test-${distro} ${distro}/
-- docker container run --rm --workdir /root --name ${distro}
-  test-${distro} env
+- docker container run --rm --workdir /root --name ${distro} test-${distro} env
 - docker image ls
 after_failure:
 - docker container logs --details ${distro}
@@ -40,3 +39,8 @@ jobs:
 branches:
   except:
   - master
+notifications:
+  slack:
+    secure: WFXIuHp1CYCZBEfVzVmCjI3rOqduSbhU1fGVWKkFRiaJ1ttP11VjvGakLrsqZi61nnF/FaJCwCvlf0JXpQcDzzYCsu19oKBTsYdNGkH/lNFeGziYgwDGd/gsZFjS3HOr3XsapDV6Y4OTA/Wrf0kH6D2a7voS/Qx2obG4h5t9labpqjD4VpooIJbOWc3fYiSblZmaE/bQQcxkTEEnqhe2RtdhqWj6qxfHW7eIDOlWUwSwBqlvb4M2tlgwyIyBLG8Pq0/X6p5GwL7zmCLcpWb961TD1CVHMXYGoU4lSn5SuYJgiOzoheQj8Fd+E9nK+RIe2DrqQ57cv1JLLaS8GGRo/u62L5+lEReNBGe4ciFTH0KP8uqrXDgX+AMl7tkxqCSDK1iBypHRyd3vVN0aasYnPIJH+sWOKhnrCWXT3Ck+GYf11mp+0EPSqZRNXcUCHQ2bWG8pZvzjBYndZ9pl3DwZz3F6kFtSFkCJGxvHDgWGBFq2TzVZDQ9NyTY4U4kB7bFRP52ET5xYu4LO32la/04d/PyM7B7ncoW8yXTIwlCAGasiwehhQbUTwB3bm+5gZKsvqDivxrcoYADxwqOieCeFZWupJ1tUUiRz++9uhzrhrBd4bDBjAtEPfS3dZyqiZwPNv4MYVcTxSV/ktRlt7EdN2ZhYrKOG5/Y23YobvO1sOPU=
+  on_success: always
+  on_failure: always
