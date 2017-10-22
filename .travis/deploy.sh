@@ -12,7 +12,8 @@ openssl aes-256-cbc -K $encrypted_2de154196fc3_key -iv $encrypted_2de154196fc3_i
 chmod 700 ~/.ssh/
 chmod 400 ~/.ssh/id_rsa
 
-git fetch origin ${GIT_BASE}:${GIT_BASE}
-git checkout ${GIT_BASE}
-git merge --ff-only "$TRAVIS_COMMIT"
+git fetch origin ${GIT_BASE}:${GIT_BASE} && \
+git checkout ${GIT_BASE} && \
+echo "Attempting to merge $TRAVIS_COMMIT"
+git merge --ff-only "$TRAVIS_COMMIT" && \
 git push ${GIT_REPO_PUSH}
