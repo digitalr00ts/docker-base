@@ -23,6 +23,7 @@ RUN cd && set -ex && \
   apt-get autoremove -y && \
   apt-get clean && \
   rm -rf -- /tmp/* /var/tmp/* \
-     /var/cache/apt/* /var/lib/apt/lists/*
+     /var/cache/apt/* /var/lib/apt/lists/* \
+     /root/.gnupg
 
 ENTRYPOINT ["/usr/bin/tini", "-g", "--"]
